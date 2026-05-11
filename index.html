@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ficha de Estudo de Segurança Digital para Iniciantes</title>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Merriweather:wght@700;900&family=Source+Sans+3:wght@400;600;700&display=swap");
+
+    :root {
+      --bg: #f5efe3;
+      --surface: #fffdf8;
+      --surface-soft: #fff8ef;
+      --ink: #231a13;
+      --muted: #6f6052;
+      --line: #e7d8c5;
+      --accent: #8f4d1f;
+      --accent-2: #0f645b;
+      --shadow: 0 14px 34px rgba(44, 29, 16, 0.12);
+      --radius: 16px;
+      --topbar-h: 70px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: "Source Sans 3", "Segoe UI", sans-serif;
+      line-height: 1.62;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(143, 77, 31, 0.12), transparent 28%),
+        radial-gradient(circle at 100% 0%, rgba(15, 100, 91, 0.1), transparent 24%),
+        var(--bg);
+      overflow: hidden;
+    }
+
+    .topbar {
+      height: var(--topbar-h);
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: rgba(255, 253, 248, 0.94);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .topbar-inner {
+      max-width: 1360px;
+      height: 100%;
+      margin: 0 auto;
+      padding: 0 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .brand {
+      font-family: "Merriweather", Georgia, serif;
+      font-weight: 900;
+      color: var(--accent);
+      letter-spacing: 0.01em;
+      font-size: 1.04rem;
+      white-space: nowrap;
+    }
+
+    .nav { display: none; gap: 8px; overflow-x: auto; }
+
+    .nav a {
+      text-decoration: none;
+      color: #2f3a44;
+      background: var(--surface-soft);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 7px 11px;
+      font-size: 0.84rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .book-app {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 14px 18px 18px;
+      height: calc(100dvh - var(--topbar-h));
+      display: grid;
+      grid-template-columns: 300px minmax(0, 1fr);
+      gap: 16px;
+    }
+
+    .sidebar {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 14px;
+      overflow: auto;
+    }
+
+    .sidebar h2 {
+      font-family: "Merriweather", serif;
+      font-size: 1.02rem;
+      margin: 0 0 8px;
+      color: #302116;
+    }
+
+    .sidebar p {
+      margin: 0 0 12px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .sidebar-nav { display: grid; gap: 8px; }
+
+    .sidebar-nav a {
+      text-decoration: none;
+      color: #2f2a24;
+      border: 1px solid var(--line);
+      background: var(--surface-soft);
+      border-radius: 12px;
+      padding: 9px 11px;
+      font-size: 0.92rem;
+      font-weight: 600;
+      transition: 0.2s ease;
+    }
+
+    .sidebar-nav a:hover,
+    .sidebar-nav a.active {
+      border-color: rgba(143, 77, 31, 0.35);
+      color: var(--accent);
+      transform: translateX(2px);
+      background: #fff;
+    }
+
+    .viewer {
+      min-width: 0;
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr);
+      gap: 12px;
+    }
+
+    .viewer-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      background: linear-gradient(110deg, #2c1d12, #4a2f1b);
+      color: #f9ebd4;
+      border: 1px solid rgba(255, 238, 210, 0.24);
+      border-radius: 999px;
+      padding: 8px 10px;
+      box-shadow: 0 10px 22px rgba(31, 19, 10, 0.28);
+    }
+
+    .viewer-status {
+      font-weight: 600;
+      font-size: 0.92rem;
+      letter-spacing: 0.01em;
+      white-space: nowrap;
+    }
+
+    .viewer-preference {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: #f9ebd4;
+      font-size: 0.82rem;
+      white-space: nowrap;
+    }
+
+    .viewer-preference select {
+      appearance: none;
+      border: 1px solid rgba(255, 238, 210, 0.36);
+      background: rgba(255, 255, 255, 0.1);
+      color: #f9ebd4;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font: inherit;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .viewer-preference select option {
+      color: #261a12;
+      background: #fffaf2;
+    }
+
+    .viewer-toolbar button {
+      appearance: none;
+      border: 1px solid rgba(255, 238, 210, 0.36);
+      background: rgba(255, 255, 255, 0.08);
+      color: #f9ebd4;
+      border-radius: 999px;
+      padding: 8px 12px;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .viewer-toolbar button:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .viewer-stage {
+      position: relative;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: rgba(255, 252, 246, 0.6);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .book {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    .page {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 0;
+      overflow: hidden;
+      transition: opacity 0.28s ease;
+    }
+
+    .page.active {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .page-content {
+      width: 100%;
+      padding: clamp(18px, 2.2vw, 34px);
+      transform-origin: top left;
+      will-change: transform;
+    }
+
+    .viewer-stage.mode-reading .page.active {
+      overflow: auto;
+    }
+
+    .viewer-stage.mode-reading .page.active::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    .viewer-stage.mode-reading .page.active::-webkit-scrollbar-thumb {
+      background: rgba(143, 77, 31, 0.42);
+      border-radius: 999px;
+      border: 2px solid rgba(255, 251, 242, 0.85);
+    }
+
+    .viewer-stage.mode-reading .page.active::-webkit-scrollbar-track {
+      background: rgba(242, 229, 210, 0.55);
+      border-radius: 999px;
+    }
+
+    .viewer-stage.mode-fit .page.active {
+      overflow: hidden;
+    }
+
+    .page-content.tight-mode {
+      font-size: 0.94em;
+    }
+
+    .page-content.tight-mode h2 {
+      margin-bottom: 8px;
+      padding-bottom: 6px;
+    }
+
+    .page-content.tight-mode h3 {
+      margin-top: 12px;
+    }
+
+    .page-content.tight-mode p,
+    .page-content.tight-mode li {
+      margin-bottom: 6px;
+    }
+
+    .scale-note {
+      position: absolute;
+      right: 12px;
+      bottom: 10px;
+      background: rgba(35, 26, 19, 0.72);
+      color: #fff;
+      border-radius: 999px;
+      padding: 4px 8px;
+      font-size: 0.74rem;
+      z-index: 20;
+      display: none;
+    }
+
+    .viewer-stage.is-scaled .scale-note {
+      display: inline-flex;
+    }
+
+    .legacy-content h1,
+    .legacy-content h2,
+    .legacy-content h3,
+    .legacy-content h4 {
+      font-family: "Merriweather", Georgia, serif;
+      color: #2a1f15;
+      text-wrap: balance;
+    }
+
+    .legacy-content img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .legacy-content table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      background: #fff;
+    }
+
+    .legacy-content th,
+    .legacy-content td {
+      border: 1px solid var(--line);
+      padding: 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .chapter-kicker {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(143, 77, 31, 0.24);
+      background: var(--surface-soft);
+      color: var(--accent);
+      font-size: 0.82rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .legacy-content h1,
+    .legacy-content h2,
+    .legacy-content h3,
+    .legacy-content h4 {
+      margin: 0 0 10px;
+      line-height: 1.18;
+    }
+
+    .legacy-content h1 {
+      font-size: clamp(1.9rem, 4.6vw, 2.9rem);
+    }
+
+    .legacy-content h2 {
+      font-size: clamp(1.26rem, 2.4vw, 1.85rem);
+      border-bottom: 2px solid var(--line);
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+    }
+
+    .legacy-content h3 {
+      font-size: clamp(1.04rem, 1.9vw, 1.3rem);
+      margin-top: 16px;
+    }
+
+    .legacy-content p {
+      margin: 0 0 10px;
+      color: #312920;
+    }
+
+    .lead {
+      font-size: 1.05rem;
+      color: #44382d;
+      max-width: 860px;
+    }
+
+    .cover {
+      background:
+        radial-gradient(circle at 88% 12%, rgba(15, 100, 91, 0.08), transparent 30%),
+        radial-gradient(circle at 10% 0%, rgba(143, 77, 31, 0.09), transparent 30%),
+        var(--surface);
+    }
+
+    .cover-grid {
+      display: grid;
+      grid-template-columns: 1.08fr 0.92fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .label {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(143, 77, 31, 0.24);
+      background: var(--surface-soft);
+      color: var(--accent);
+      font-size: 0.82rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      font-size: 1.02rem;
+      color: #3d3228;
+      margin-bottom: 12px;
+      max-width: 760px;
+    }
+
+    .cover-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .pill {
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: #3e3328;
+      font-weight: 600;
+      font-size: 0.8rem;
+      padding: 4px 8px;
+    }
+
+    .hero-card,
+    .svg-wrap {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 10px;
+    }
+
+    .hero-card svg,
+    .svg-wrap svg {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 10px;
+      background: #f8fbff;
+      border: 1px solid #e6eaf2;
+      padding: 8px;
+    }
+
+    .toc {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      counter-reset: toc;
+    }
+
+    .toc a {
+      counter-increment: toc;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 12px;
+      padding: 10px;
+      line-height: 1.35;
+    }
+
+    .toc a::before {
+      content: counter(toc, decimal-leading-zero);
+      width: 30px;
+      height: 30px;
+      border-radius: 9px;
+      background: var(--accent);
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.74rem;
+      font-weight: 700;
+      margin-right: 8px;
+      vertical-align: top;
+      margin-top: 1px;
+    }
+
+    .toc small {
+      display: block;
+      color: var(--muted);
+      font-size: 0.86rem;
+      margin-top: 2px;
+      margin-left: 38px;
+    }
+
+    .grid-2,
+    .grid-3 {
+      display: grid;
+      gap: 10px;
+      align-items: start;
+    }
+
+    .grid-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .grid-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 12px;
+      padding: 11px;
+    }
+
+    .badge {
+      display: inline-block;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--surface-soft);
+      color: #3e3328;
+      font-weight: 700;
+      font-size: 0.75rem;
+      padding: 3px 8px;
+      margin-bottom: 7px;
+    }
+
+    .callout {
+      border-radius: 12px;
+      padding: 11px 13px;
+      margin: 12px 0;
+      border: 1px solid;
+    }
+
+    .callout.info {
+      background: #eef4ff;
+      border-color: #ced9ee;
+    }
+
+    .callout.warning {
+      background: #fff2db;
+      border-color: #efd4ab;
+    }
+
+    .callout.danger {
+      background: #fff1ee;
+      border-color: #edc8bf;
+    }
+
+    .callout.success {
+      background: #e9f6ef;
+      border-color: #cce5d7;
+    }
+
+    .checklist {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 10px;
+    }
+
+    .checklist li {
+      position: relative;
+      padding-left: 26px;
+      margin-bottom: 8px;
+    }
+
+    .checklist li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 18px;
+      height: 18px;
+      border-radius: 6px;
+      background: #e9f6ef;
+      color: #0f645b;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .step {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 12px;
+      padding: 11px;
+      display: grid;
+      grid-template-columns: 32px 1fr;
+      gap: 10px;
+      margin-bottom: 8px;
+      align-items: start;
+    }
+
+    .step .num {
+      width: 24px;
+      height: 24px;
+      border-radius: 8px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2px;
+    }
+
+    .glossary {
+      margin: 0;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .glossary dt {
+      margin: 0;
+      font-weight: 700;
+      color: #2a1f15;
+    }
+
+    .glossary dd {
+      margin: 4px 0 0;
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 12px;
+      padding: 10px;
+    }
+
+    .source-list {
+      margin: 0;
+      padding-left: 1.1rem;
+    }
+
+    .source-list li {
+      margin-bottom: 6px;
+    }
+
+    .source-list a {
+      color: var(--accent);
+      text-decoration: none;
+      word-break: break-word;
+    }
+
+    .print-note,
+    .mini {
+      color: var(--muted);
+      font-size: 0.88rem;
+      margin-top: 10px;
+    }
+
+
+
+    .study-objectives {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin: 12px 0;
+    }
+
+    .study-objectives .card h3,
+    .question-card h3,
+    .lab-card h3 {
+      margin-top: 0;
+    }
+
+    .diagnostic-grid,
+    .activity-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin: 12px 0;
+    }
+
+    .question-card,
+    .lab-card {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 14px;
+      padding: 12px;
+    }
+
+    .question-card strong {
+      color: var(--accent);
+    }
+
+    .student-answer {
+      min-height: 58px;
+      margin-top: 10px;
+      padding: 10px 11px;
+      border: 1px dashed rgba(143, 77, 31, 0.38);
+      border-radius: 12px;
+      background: #fffdf8;
+      outline: none;
+      white-space: pre-wrap;
+      color: #2c2218;
+    }
+
+    .student-answer:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(143, 77, 31, 0.13);
+      background: #fff;
+    }
+
+    .student-answer:empty::before {
+      content: attr(data-placeholder);
+      color: #8b7a68;
+    }
+
+    .study-note {
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, #fffdf8, #fff8ef);
+      border-radius: 14px;
+      padding: 12px;
+      margin: 12px 0;
+    }
+
+    .mini-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      background: #fff;
+    }
+
+    .mini-table th,
+    .mini-table td {
+      border: 1px solid var(--line);
+      padding: 9px;
+      vertical-align: top;
+      text-align: left;
+    }
+
+    .mini-table th {
+      background: var(--surface-soft);
+      color: #2a1f15;
+    }
+
+    .practice-line {
+      display: grid;
+      grid-template-columns: 36px 1fr;
+      gap: 10px;
+      align-items: start;
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 12px;
+      padding: 10px;
+      margin-bottom: 8px;
+    }
+
+    .practice-line .num {
+      width: 26px;
+      height: 26px;
+      border-radius: 9px;
+      background: var(--accent-2);
+      color: #fff;
+      font-weight: 800;
+      display: grid;
+      place-items: center;
+      font-size: .8rem;
+    }
+
+    .decision-box {
+      border: 1px solid #efd4ab;
+      background: #fff8eb;
+      border-radius: 14px;
+      padding: 12px;
+      margin: 12px 0;
+    }
+
+    .rubric {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+      margin: 12px 0;
+    }
+
+    .rubric div {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 12px;
+      padding: 10px;
+    }
+
+    .cover-grid.study-cover {
+      align-items: center;
+    }
+
+    .study-cover .hero-card svg {
+      max-height: 390px;
+    }
+
+    @media (max-width: 1080px) {
+      .study-objectives,
+      .diagnostic-grid,
+      .activity-grid,
+      .rubric {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media print {
+      .student-answer { min-height: 70px; }
+    }
+
+    @media (max-width: 1080px) {
+      body { overflow: auto; }
+      .nav { display: flex; }
+      .book-app { height: auto; grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      .viewer-stage { min-height: 75vh; }
+      .cover-grid,
+      .toc,
+      .grid-2,
+      .grid-3,
+      .glossary {
+        grid-template-columns: 1fr;
+      }
+      .page {
+        position: relative;
+        inset: auto;
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+      }
+      .page-content {
+        transform: none !important;
+        width: auto !important;
+      }
+      .viewer-toolbar,
+      .viewer-preference,
+      .scale-note { display: none !important; }
+    }
+
+    @media print {
+      body { overflow: visible; background: #fff; }
+      .topbar, .sidebar, .viewer-toolbar, .scale-note { display: none; }
+      .book-app,
+      .viewer,
+      .viewer-stage,
+      .book { display: block; height: auto; overflow: visible; box-shadow: none; border: none; padding: 0; margin: 0; }
+      .page {
+        position: static;
+        opacity: 1;
+        visibility: visible;
+        border: none;
+        box-shadow: none;
+        page-break-after: always;
+      }
+      .page-content {
+        transform: none !important;
+        width: auto !important;
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">Ficha de Estudo · Segurança Digital</div>
+      <nav class="nav" aria-label="Navegação da ficha de estudo">
+        <a href="#diagnostico">Diagnóstico</a>
+        <a href="#roteiro">Roteiro</a>
+        <a href="#conceitos">Conceitos</a>
+        <a href="#senhas">Senhas</a>
+        <a href="#laboratorio">Laboratório</a>
+        <a href="#autoavaliacao">Autoavaliação</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="book-app">
+    <aside class="sidebar" aria-label="Sumário lateral">
+      <h2>Sumário</h2>
+      <p>Selecione um tópico para exibir no painel de leitura.</p>
+      <nav class="sidebar-nav" id="sidebarNav">
+        <a href="#capa">Capa</a>
+        <a href="#orientacoes">Orientações de uso</a>
+        <a href="#diagnostico">Diagnóstico inicial</a>
+        <a href="#roteiro">Roteiro de estudo</a>
+        <a href="#conceitos">1. Conceitos essenciais</a>
+        <a href="#protecao">2. O que proteger</a>
+        <a href="#ameacas">3. Ameaças e sinais de alerta</a>
+        <a href="#ataques">4. Como os golpes acontecem</a>
+        <a href="#senhas">5. Senhas, passkeys e cofres</a>
+        <a href="#duas-etapas">6. Autenticação em duas etapas</a>
+        <a href="#configuracoes">7. Configurações básicas</a>
+        <a href="#comunicacao">8. E-mail, redes e mensagens</a>
+        <a href="#financeiro">9. Compras, bancos e PIX</a>
+        <a href="#backup">10. Backup e recuperação</a>
+        <a href="#resposta">11. Suspeita de golpe</a>
+        <a href="#laboratorio">12. Laboratório prático</a>
+        <a href="#exercicios">13. Exercícios de fixação</a>
+        <a href="#projeto">14. Projeto final</a>
+        <a href="#autoavaliacao">15. Autoavaliação</a>
+        <a href="#glossario">Glossário</a>
+      </nav>
+    </aside>
+
+    <section class="viewer" aria-label="Área de exibição da apostila">
+      <div class="viewer-toolbar">
+        <button id="prevPage" type="button">◀ Anterior</button>
+        <div class="viewer-status" id="viewerStatus">Tópico 1 de 1</div>
+        <label class="viewer-preference" for="scalePreference">
+          Exibição:
+          <select id="scalePreference">
+            <option value="reading" selected>Modo leitura</option>
+            <option value="fit">Modo reduzido</option>
+          </select>
+        </label>
+        <button id="nextPage" type="button">Próximo ▶</button>
+      </div>
+      <div class="viewer-stage" id="viewerStage">
+        <div class="scale-note" id="scaleNote">Ajuste automático para caber na tela</div>
+        <div class="book" id="bookPages">
+
+    <section class="page cover" id="capa">
+      <div class="cover-grid study-cover">
+        <div>
+          <span class="label">Ficha de estudo ampla e detalhada</span>
+          <h1>Segurança Digital Básica</h1>
+          <p class="subtitle">Roteiro de aprendizagem para compreender riscos digitais, proteger contas, reconhecer golpes, configurar dispositivos e agir com segurança em situações suspeitas.</p>
+          <div class="cover-meta">
+            <span class="pill">Estudo guiado</span>
+            <span class="pill">Campos editáveis</span>
+            <span class="pill">Checklists práticos</span>
+            <span class="pill">Laboratório aplicado</span>
+            <span class="pill">Autoavaliação</span>
+          </div>
+          <div class="study-note">
+            <strong>Uso recomendado:</strong> leia cada tópico, responda aos campos de anotação, realize as práticas no próprio aparelho e retorne aos checklists sempre que fizer uma configuração nova.
+          </div>
+        </div>
+        <div class="hero-card" aria-label="Ilustração de estudo em segurança digital">
+          <svg viewBox="0 0 520 420" role="img" aria-labelledby="svgCapaFichaSeg">
+            <title id="svgCapaFichaSeg">Ficha de segurança digital com escudo, celular, computador e checklist</title>
+            <defs>
+              <linearGradient id="coverShield" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#0f645b"/><stop offset="100%" stop-color="#38bdf8"/></linearGradient>
+              <filter id="coverShadow" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="#2c1d12" flood-opacity=".18"/></filter>
+            </defs>
+            <rect x="28" y="42" width="464" height="330" rx="28" fill="#fff8ef" stroke="#e7d8c5"/>
+            <g filter="url(#coverShadow)">
+              <rect x="72" y="96" width="230" height="150" rx="18" fill="#0f172a"/>
+              <rect x="92" y="118" width="190" height="94" rx="10" fill="#e0f2fe"/>
+              <rect x="152" y="247" width="70" height="22" rx="8" fill="#0f172a"/>
+              <rect x="122" y="269" width="130" height="14" rx="7" fill="#0f172a"/>
+              <rect x="330" y="108" width="94" height="174" rx="24" fill="#ffffff" stroke="#cbd5e1"/>
+              <rect x="344" y="140" width="66" height="96" rx="11" fill="#dcfce7"/>
+              <circle cx="377" cy="257" r="7" fill="#334155"/>
+              <path d="M260 92 L354 128 V198 C354 264 317 310 260 333 C203 310 166 264 166 198 V128 Z" fill="url(#coverShield)" stroke="#ffffff" stroke-width="8"/>
+              <path d="M222 206 l25 25 l55 -68" fill="none" stroke="#ffffff" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+            </g>
+            <g font-family="Arial, sans-serif" fill="#2a1f15">
+              <rect x="74" y="310" width="370" height="38" rx="12" fill="#ffffff" stroke="#e7d8c5"/>
+              <circle cx="96" cy="329" r="10" fill="#0f645b"/><path d="M91 329 l4 4 l8 -10" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              <text x="116" y="335" font-size="18" font-weight="700">Proteger contas, dados, aparelhos e dinheiro</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="orientacoes">
+      <div class="chapter-kicker">Orientações</div>
+      <h2>Como usar esta ficha de estudo</h2>
+      <p class="lead">Esta ficha transforma o conteúdo da apostila em um instrumento de estudo ativo. O aluno não deve apenas ler: deve responder, comparar, praticar, revisar e aplicar as medidas de segurança no próprio cotidiano digital.</p>
+      <div class="grid-3">
+        <div class="card"><h3>1. Ler</h3><p>Comece pelos conceitos. Leia sem pressa e destaque termos que aparecem várias vezes, como senha, código, golpe, autenticação e backup.</p></div>
+        <div class="card"><h3>2. Responder</h3><p>Use os campos editáveis para registrar o que você já sabe, o que aprendeu e quais dúvidas ainda precisam ser esclarecidas.</p></div>
+        <div class="card"><h3>3. Aplicar</h3><p>Faça as práticas guiadas no computador, celular, navegador, e-mail, redes sociais e aplicativos de mensagem.</p></div>
+      </div>
+      <div class="callout info"><strong>Campos editáveis:</strong> os espaços de resposta podem ser preenchidos diretamente na página. As respostas ficam armazenadas no navegador por meio de localStorage e podem ser alteradas sempre que o aluno quiser.</div>
+      <h3>Critério de estudo</h3>
+      <ul class="checklist">
+        <li>Ao final de cada tópico, o aluno deve conseguir explicar o conceito com as próprias palavras.</li>
+        <li>Ao final das práticas, o aluno deve ter executado pelo menos uma configuração real de proteção.</li>
+        <li>Ao final da ficha, o aluno deve ser capaz de reconhecer mensagens suspeitas e saber o que fazer antes de clicar, pagar ou informar dados.</li>
+      </ul>
+    </section>
+
+    <section class="page" id="diagnostico">
+      <div class="chapter-kicker">Diagnóstico inicial</div>
+      <h2>O que você já sabe sobre segurança digital?</h2>
+      <p class="lead">Responda antes de estudar. O objetivo não é acertar tudo, mas identificar conhecimentos prévios, hábitos de risco e pontos que precisam de atenção.</p>
+      <div class="diagnostic-grid">
+        <div class="question-card"><strong>1. O que significa estar seguro no ambiente digital?</strong><div class="student-answer" contenteditable="true" data-save-key="diag-1" data-placeholder="Digite sua resposta..."></div></div>
+        <div class="question-card"><strong>2. Por que não devemos repetir a mesma senha em várias contas?</strong><div class="student-answer" contenteditable="true" data-save-key="diag-2" data-placeholder="Digite sua resposta..."></div></div>
+        <div class="question-card"><strong>3. O que você faria se recebesse um código de verificação sem ter solicitado?</strong><div class="student-answer" contenteditable="true" data-save-key="diag-3" data-placeholder="Digite sua resposta..."></div></div>
+        <div class="question-card"><strong>4. Como você identifica se uma mensagem pode ser golpe?</strong><div class="student-answer" contenteditable="true" data-save-key="diag-4" data-placeholder="Digite sua resposta..."></div></div>
+        <div class="question-card"><strong>5. O que é backup e por que ele é importante?</strong><div class="student-answer" contenteditable="true" data-save-key="diag-5" data-placeholder="Digite sua resposta..."></div></div>
+        <div class="question-card"><strong>6. Quais contas suas merecem proteção prioritária?</strong><div class="student-answer" contenteditable="true" data-save-key="diag-6" data-placeholder="Digite sua resposta..."></div></div>
+      </div>
+      <div class="callout warning"><strong>Reflexão inicial:</strong> se você respondeu “não sei” em alguma pergunta, isso não é problema. Use essa resposta como marcação de prioridade durante o estudo.</div>
+    </section>
+
+    <section class="page" id="roteiro">
+      <div class="chapter-kicker">Roteiro</div>
+      <h2>Plano de estudo da ficha</h2>
+      <p class="lead">O estudo foi organizado em uma sequência progressiva: primeiro os conceitos, depois os riscos, em seguida as proteções e, por fim, as práticas de resposta e prevenção.</p>
+      <nav class="toc">
+        <a href="#conceitos">1. Conceitos essenciais <small>Entender segurança digital, privacidade, risco, ameaça, golpe e proteção.</small></a>
+        <a href="#protecao">2. O que proteger <small>Mapear contas, aparelhos, dados, arquivos, dinheiro e identidade digital.</small></a>
+        <a href="#ameacas">3. Ameaças digitais <small>Reconhecer phishing, malware, ransomware, perfis falsos, links suspeitos e aplicativos falsos.</small></a>
+        <a href="#ataques">4. Como os golpes acontecem <small>Compreender isca, urgência, ação da vítima e dano final.</small></a>
+        <a href="#senhas">5. Senhas e passkeys <small>Criar estratégia de acesso com senha forte, gerenciador e passkeys.</small></a>
+        <a href="#duas-etapas">6. Autenticação em duas etapas <small>Configurar segunda camada de proteção nas contas principais.</small></a>
+        <a href="#configuracoes">7. Configurações básicas <small>Proteger Windows, navegador, celular e roteador doméstico.</small></a>
+        <a href="#comunicacao">8. E-mail, redes e mensagens <small>Aplicar regras de cuidado nos canais mais usados para golpes.</small></a>
+        <a href="#financeiro">9. Compras, bancos e PIX <small>Verificar pagamentos, boletos, lojas e transações digitais.</small></a>
+        <a href="#backup">10. Backup e recuperação <small>Evitar perda de arquivos e preparar plano de recuperação.</small></a>
+        <a href="#laboratorio">11. Laboratório prático <small>Aplicar checklists no próprio aparelho e nas contas pessoais.</small></a>
+        <a href="#autoavaliacao">12. Autoavaliação <small>Conferir o que foi aprendido e planejar melhorias.</small></a>
+      </nav>
+    </section>
+
+    <section class="page" id="conceitos">
+      <div class="chapter-kicker">1. Conceitos essenciais</div>
+      <h2>O que é segurança digital</h2>
+      <p class="lead">Segurança digital é o conjunto de cuidados técnicos e comportamentais usados para proteger pessoas, contas, aparelhos, arquivos, dinheiro e informações no uso de computadores, celulares, internet, aplicativos, e-mail, redes sociais e serviços online.</p>
+      <div class="svg-wrap">
+        <svg viewBox="0 0 920 320" role="img" aria-labelledby="svgPilaresFicha"><title id="svgPilaresFicha">Pilares da segurança digital</title><rect width="920" height="320" rx="24" fill="#f8fafc"/><g transform="translate(55,48)"><rect x="0" y="0" width="180" height="210" rx="22" fill="#e0f2fe" stroke="#bae6fd"/><circle cx="90" cy="64" r="34" fill="#0284c7"/><path d="M72 65 l13 13 l25 -30" fill="none" stroke="white" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/><text x="90" y="130" text-anchor="middle" font-size="24" font-weight="700" fill="#0f172a">Contas</text><text x="90" y="164" text-anchor="middle" font-size="16" fill="#475569">senha, 2FA e</text><text x="90" y="186" text-anchor="middle" font-size="16" fill="#475569">recuperação</text></g><g transform="translate(270,48)"><rect x="0" y="0" width="180" height="210" rx="22" fill="#dcfce7" stroke="#bbf7d0"/><circle cx="90" cy="64" r="34" fill="#16a34a"/><rect x="67" y="48" width="46" height="36" rx="6" fill="white"/><path d="M78 48 v-13 c0-16 24-16 24 0 v13" fill="none" stroke="white" stroke-width="8" stroke-linecap="round"/><text x="90" y="130" text-anchor="middle" font-size="24" font-weight="700" fill="#0f172a">Dados</text><text x="90" y="164" text-anchor="middle" font-size="16" fill="#475569">privacidade e</text><text x="90" y="186" text-anchor="middle" font-size="16" fill="#475569">documentos</text></g><g transform="translate(485,48)"><rect x="0" y="0" width="180" height="210" rx="22" fill="#fef3c7" stroke="#fde68a"/><circle cx="90" cy="64" r="34" fill="#d97706"/><rect x="76" y="42" width="28" height="46" rx="6" fill="white"/><path d="M112 50 l18 7 v15 c0 12-7 21-18 26 c-11-5-18-14-18-26 V57 Z" fill="#fff" stroke="#d97706" stroke-width="3"/><text x="90" y="130" text-anchor="middle" font-size="24" font-weight="700" fill="#0f172a">Aparelhos</text><text x="90" y="164" text-anchor="middle" font-size="16" fill="#475569">atualizações e</text><text x="90" y="186" text-anchor="middle" font-size="16" fill="#475569">bloqueio</text></g><g transform="translate(700,48)"><rect x="0" y="0" width="180" height="210" rx="22" fill="#fee2e2" stroke="#fecaca"/><circle cx="90" cy="64" r="34" fill="#dc2626"/><text x="90" y="75" text-anchor="middle" font-size="42" font-weight="800" fill="white">R$</text><text x="90" y="130" text-anchor="middle" font-size="24" font-weight="700" fill="#0f172a">Dinheiro</text><text x="90" y="164" text-anchor="middle" font-size="16" fill="#475569">bancos, PIX e</text><text x="90" y="186" text-anchor="middle" font-size="16" fill="#475569">compras</text></g></svg>
+      </div>
+      <div class="grid-3">
+        <div class="card"><h3>Privacidade</h3><p>É o controle sobre quem vê seus dados, publicações, localização, fotos, contatos, documentos e atividades online.</p></div>
+        <div class="card"><h3>Segurança</h3><p>É a proteção contra invasão, perda, golpe, roubo de conta, instalação maliciosa, fraude financeira e exposição indevida.</p></div>
+        <div class="card"><h3>Confiança</h3><p>É a verificação de que um site, mensagem, contato, aplicativo ou pagamento realmente pertence a quem afirma pertencer.</p></div>
+      </div>
+      <h3>Três perguntas de defesa</h3>
+      <div class="practice-line"><span class="num">1</span><div><strong>Quem está pedindo?</strong><br>Antes de responder ou clicar, confirme se a pessoa, empresa ou instituição é real e se o canal usado é oficial.</div></div>
+      <div class="practice-line"><span class="num">2</span><div><strong>O que estão pedindo?</strong><br>Desconfie de pedido de senha, código, foto de documento, dinheiro, instalação de aplicativo ou acesso remoto.</div></div>
+      <div class="practice-line"><span class="num">3</span><div><strong>Há pressa, ameaça ou prêmio?</strong><br>Golpes usam urgência para reduzir a capacidade de pensar: “agora”, “última chance”, “sua conta será bloqueada”.</div></div>
+      <div class="question-card"><strong>Anotação do aluno: escreva com suas palavras o que é segurança digital.</strong><div class="student-answer" contenteditable="true" data-save-key="conceitos-resumo" data-placeholder="Digite seu resumo..."></div></div>
+    </section>
+
+    <section class="page" id="protecao">
+      <div class="chapter-kicker">2. O que proteger</div>
+      <h2>Mapa dos bens digitais do usuário</h2>
+      <p class="lead">A segurança começa quando o aluno identifica o que possui de valor no ambiente digital. Nem tudo é dinheiro: contas, documentos, fotos, histórico de mensagens e identidade também podem ser explorados em golpes.</p>
+      <table class="mini-table"><thead><tr><th>O que proteger</th><th>Exemplos</th><th>Risco principal</th><th>Primeira proteção</th></tr></thead><tbody><tr><td>Contas</td><td>E-mail, gov.br, banco, rede social, loja online, WhatsApp.</td><td>Alguém se passar por você.</td><td>Senha única e 2FA.</td></tr><tr><td>Senhas e códigos</td><td>Senha do e-mail, SMS, PIN, token e QR Code de login.</td><td>Entrada não autorizada.</td><td>Nunca compartilhar.</td></tr><tr><td>Dados pessoais</td><td>CPF, RG, endereço, nascimento, fotos, documentos digitalizados.</td><td>Fraude e falsificação.</td><td>Exposição mínima.</td></tr><tr><td>Arquivos</td><td>Fotos, trabalhos, contratos, comprovantes, planilhas.</td><td>Perda, roubo ou bloqueio.</td><td>Backup testado.</td></tr><tr><td>Aparelhos</td><td>Celular, notebook, computador, tablet, pendrive e roteador.</td><td>Espionagem ou acesso físico.</td><td>Bloqueio de tela e atualização.</td></tr><tr><td>Dinheiro</td><td>Banco, PIX, cartão, boleto, carteiras digitais.</td><td>Transferência indevida.</td><td>Conferência antes de pagar.</td></tr></tbody></table>
+      <div class="callout danger"><strong>Atenção especial ao e-mail:</strong> o e-mail principal geralmente recupera várias contas. Se ele for invadido, outras contas podem ser redefinidas. Por isso, deve ter senha exclusiva, autenticação em duas etapas e dados de recuperação atualizados.</div>
+      <h3>Inventário pessoal de segurança</h3>
+      <div class="diagnostic-grid">
+        <div class="question-card"><strong>Liste suas três contas mais importantes.</strong><div class="student-answer" contenteditable="true" data-save-key="inventario-contas" data-placeholder="Ex.: e-mail, gov.br, banco..."></div></div>
+        <div class="question-card"><strong>Quais arquivos você não poderia perder?</strong><div class="student-answer" contenteditable="true" data-save-key="inventario-arquivos" data-placeholder="Ex.: fotos, documentos, trabalhos..."></div></div>
+      </div>
+    </section>
+
+    <section class="page" id="ameacas">
+      <div class="chapter-kicker">3. Ameaças e sinais de alerta</div>
+      <h2>Principais perigos digitais</h2>
+      <p class="lead">Grande parte dos ataques contra usuários comuns não começa com tecnologia sofisticada, mas com manipulação: a vítima é induzida a clicar, pagar, baixar, responder, fornecer dados ou aprovar uma ação.</p>
+      <div class="grid-2">
+        <div class="card"><span class="badge">Golpe</span><h3>Phishing</h3><p>Mensagem falsa que imita banco, loja, rede social, suporte ou órgão público para roubar senha, código ou dados pessoais.</p></div>
+        <div class="card"><span class="badge">Mensagem</span><h3>Smishing e vishing</h3><p>Smishing usa SMS ou mensagens curtas. Vishing usa ligação ou áudio, fingindo ser atendente, parente ou instituição.</p></div>
+        <div class="card"><span class="badge">Programa malicioso</span><h3>Malware</h3><p>Programa criado para espionar, roubar dados, prejudicar o aparelho, exibir anúncios abusivos ou abrir acesso a criminosos.</p></div>
+        <div class="card"><span class="badge">Bloqueio</span><h3>Ransomware</h3><p>Malware que bloqueia arquivos e exige pagamento. A proteção mais importante para usuário comum é prevenção e backup.</p></div>
+        <div class="card"><span class="badge">Imitação</span><h3>Perfil falso</h3><p>Conta que se passa por loja, parente, amigo, influenciador ou instituição para pedir dinheiro, links ou dados.</p></div>
+        <div class="card"><span class="badge">Instalação</span><h3>Aplicativo falso</h3><p>App que parece legítimo, mas pede permissões abusivas, rouba dados ou induz pagamentos.</p></div>
+      </div>
+      <h3>Sinais de alerta</h3>
+      <ul class="checklist"><li>Mensagem com urgência: “última chance”, “bloqueio imediato”, “responda agora”.</li><li>Pedido de senha, código, QR Code, token, foto de documento ou dados bancários.</li><li>Link encurtado, endereço estranho, letras trocadas ou domínio diferente do oficial.</li><li>Oferta muito boa, prêmio inesperado, empréstimo fácil ou preço muito abaixo do normal.</li><li>Contato novo dizendo ser parente, banco, suporte técnico ou órgão público.</li><li>Pedido para instalar app fora da loja oficial ou permitir acesso remoto.</li></ul>
+      <div class="question-card"><strong>Atividade: escreva três sinais que fariam você desconfiar de uma mensagem.</strong><div class="student-answer" contenteditable="true" data-save-key="ameacas-sinais" data-placeholder="Digite os sinais de alerta..."></div></div>
+    </section>
+
+    <section class="page" id="ataques">
+      <div class="chapter-kicker">4. Como os golpes acontecem</div>
+      <h2>Fluxo comum de um golpe digital</h2>
+      <p class="lead">Estudar golpes não significa aprender a aplicá-los. Nesta ficha, o objetivo é defensivo: reconhecer a estrutura do golpe para interromper a ação antes do dano.</p>
+      <div class="svg-wrap"><svg viewBox="0 0 940 360" role="img" aria-labelledby="svgFluxoGolpe"><title id="svgFluxoGolpe">Fluxo comum de golpe digital</title><rect width="940" height="360" rx="26" fill="#f8fafc"/><defs><marker id="arrowFicha" markerWidth="10" markerHeight="10" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 z" fill="#64748b"/></marker></defs><g font-family="Arial, sans-serif"><g transform="translate(35,82)"><rect width="150" height="110" rx="18" fill="#e0f2fe" stroke="#bae6fd"/><text x="75" y="43" text-anchor="middle" font-size="20" font-weight="700" fill="#0f172a">1. Isca</text><text x="75" y="76" text-anchor="middle" font-size="14" fill="#475569">mensagem, link</text><text x="75" y="96" text-anchor="middle" font-size="14" fill="#475569">ou oferta</text></g><line x1="195" y1="137" x2="265" y2="137" stroke="#64748b" stroke-width="3" marker-end="url(#arrowFicha)"/><g transform="translate(275,82)"><rect width="150" height="110" rx="18" fill="#fef3c7" stroke="#fde68a"/><text x="75" y="43" text-anchor="middle" font-size="20" font-weight="700" fill="#0f172a">2. Pressa</text><text x="75" y="76" text-anchor="middle" font-size="14" fill="#475569">ameaça ou</text><text x="75" y="96" text-anchor="middle" font-size="14" fill="#475569">vantagem</text></g><line x1="435" y1="137" x2="505" y2="137" stroke="#64748b" stroke-width="3" marker-end="url(#arrowFicha)"/><g transform="translate(515,82)"><rect width="150" height="110" rx="18" fill="#fee2e2" stroke="#fecaca"/><text x="75" y="43" text-anchor="middle" font-size="20" font-weight="700" fill="#0f172a">3. Ação</text><text x="75" y="76" text-anchor="middle" font-size="14" fill="#475569">clicar, pagar</text><text x="75" y="96" text-anchor="middle" font-size="14" fill="#475569">ou informar</text></g><line x1="675" y1="137" x2="745" y2="137" stroke="#64748b" stroke-width="3" marker-end="url(#arrowFicha)"/><g transform="translate(755,82)"><rect width="150" height="110" rx="18" fill="#dcfce7" stroke="#bbf7d0"/><text x="75" y="43" text-anchor="middle" font-size="20" font-weight="700" fill="#0f172a">4. Dano</text><text x="75" y="76" text-anchor="middle" font-size="14" fill="#475569">perda, fraude</text><text x="75" y="96" text-anchor="middle" font-size="14" fill="#475569">ou invasão</text></g><rect x="175" y="246" width="590" height="62" rx="18" fill="#fff" stroke="#cbd5e1"/><text x="470" y="284" text-anchor="middle" font-size="18" font-weight="700" fill="#0f172a">Ponto de defesa: parar, verificar por outro canal e não agir sob pressão</text></g></svg></div>
+      <table class="mini-table"><thead><tr><th>Etapa</th><th>Como aparece</th><th>Defesa prática</th></tr></thead><tbody><tr><td>Isca</td><td>Mensagem, oferta, cobrança, falso suporte, falso prêmio.</td><td>Verifique origem e contexto.</td></tr><tr><td>Pressão</td><td>Urgência, ameaça, segredo, medo ou vantagem exagerada.</td><td>Pare e respire antes de agir.</td></tr><tr><td>Ação</td><td>Clicar, instalar, pagar, informar código ou senha.</td><td>Não faça nada sem confirmar por canal oficial.</td></tr><tr><td>Dano</td><td>Perda de dinheiro, roubo de conta, exposição de dados.</td><td>Troque senhas, bloqueie acesso e procure suporte.</td></tr></tbody></table>
+      <div class="decision-box"><strong>Regra prática:</strong> quando a mensagem tenta impedir que você pense, ela merece desconfiança. Segurança digital exige pausa, conferência e confirmação.</div>
+    </section>
+
+    <section class="page" id="senhas">
+      <div class="chapter-kicker">5. Senhas, passkeys e cofres</div>
+      <h2>Como proteger o acesso às contas</h2>
+      <p class="lead">A senha é uma das principais portas de entrada para suas contas. Senha fraca, repetida ou compartilhada aumenta o risco de invasão.</p>
+      <div class="grid-2"><div class="card"><h3>Senha fraca</h3><p>Usa nome, data, telefone, “123456”, “senha2026”, nome de familiar ou palavra comum. Costuma ser repetida em vários serviços.</p></div><div class="card"><h3>Senha forte</h3><p>É longa, exclusiva, difícil de adivinhar e preferencialmente gerada ou armazenada em um gerenciador confiável.</p></div></div>
+      <h3>Estratégia recomendada</h3>
+      <ul class="checklist"><li>Usar senha exclusiva no e-mail principal.</li><li>Não repetir senha de banco, e-mail, redes sociais e lojas.</li><li>Guardar senhas em gerenciador confiável, não em mensagens abertas.</li><li>Ativar autenticação em duas etapas nas contas importantes.</li><li>Usar passkeys quando a plataforma confiável oferecer o recurso.</li></ul>
+      <table class="mini-table"><thead><tr><th>Recurso</th><th>Para que serve</th><th>Cuidado</th></tr></thead><tbody><tr><td>Gerenciador de senhas</td><td>Guarda senhas diferentes em um cofre digital.</td><td>Proteja a senha principal e configure recuperação.</td></tr><tr><td>Passkey</td><td>Permite login usando dispositivo, biometria ou PIN.</td><td>Tenha método de recuperação e aparelho protegido.</td></tr><tr><td>Senha única</td><td>Evita que vazamento em um site comprometa outras contas.</td><td>Não reutilize em serviços diferentes.</td></tr></tbody></table>
+      <div class="question-card"><strong>Plano do aluno: quais contas terão senha exclusiva primeiro?</strong><div class="student-answer" contenteditable="true" data-save-key="plano-senhas" data-placeholder="Liste suas prioridades..."></div></div>
+    </section>
+
+    <section class="page" id="duas-etapas">
+      <div class="chapter-kicker">6. Autenticação em duas etapas</div>
+      <h2>Uma segunda camada de proteção</h2>
+      <p class="lead">Autenticação em duas etapas, também chamada de 2FA ou MFA, adiciona uma camada além da senha. Mesmo que alguém descubra sua senha, ainda precisará de um segundo fator para entrar.</p>
+      <div class="grid-2"><div class="card"><h3>Ordem de prioridade</h3><ol><li>E-mail principal.</li><li>gov.br.</li><li>Banco e carteiras digitais.</li><li>WhatsApp e mensageiros.</li><li>Redes sociais.</li><li>Nuvem e armazenamento.</li></ol></div><div class="card"><h3>Tipos comuns</h3><ul><li>Aplicativo autenticador.</li><li>SMS.</li><li>E-mail de confirmação.</li><li>Passkey ou chave de segurança.</li></ul></div></div>
+      <div class="callout danger"><strong>Código de verificação não se compartilha:</strong> se alguém pedir um código que chegou por SMS, e-mail ou aplicativo autenticador, trate como tentativa de golpe.</div>
+      <div class="diagnostic-grid"><div class="question-card"><strong>Quais contas suas já possuem 2FA?</strong><div class="student-answer" contenteditable="true" data-save-key="2fa-contas" data-placeholder="Digite aqui..."></div></div><div class="question-card"><strong>Quais contas ainda precisam ser configuradas?</strong><div class="student-answer" contenteditable="true" data-save-key="2fa-pendentes" data-placeholder="Digite aqui..."></div></div></div>
+    </section>
+
+    <section class="page" id="configuracoes">
+      <div class="chapter-kicker">7. Configurações básicas</div>
+      <h2>Proteções simples em computador, navegador, celular e Wi‑Fi</h2>
+      <p class="lead">Mesmo sem conhecimento técnico avançado, o usuário pode reduzir riscos com ajustes básicos. A segurança deve começar no aparelho, passar pelo navegador e chegar às contas online.</p>
+      <div class="grid-2"><div class="card"><h3>No computador</h3><ul class="checklist"><li>Ativar atualizações automáticas.</li><li>Manter antivírus ou Microsoft Defender ativo.</li><li>Usar senha, PIN ou biometria.</li><li>Baixar programas apenas de fontes oficiais.</li><li>Remover programas desconhecidos.</li></ul></div><div class="card"><h3>No navegador</h3><ul class="checklist"><li>Manter Chrome, Edge, Firefox, Safari, Opera ou Brave atualizado.</li><li>Ativar proteção contra sites perigosos.</li><li>Remover extensões desconhecidas.</li><li>Verificar endereço antes de digitar senha.</li><li>Não salvar senha em computador público.</li></ul></div><div class="card"><h3>No celular</h3><ul class="checklist"><li>Usar bloqueio de tela.</li><li>Manter Android ou iOS atualizado.</li><li>Instalar apps apenas pela loja oficial.</li><li>Revisar permissões de câmera, microfone, localização e contatos.</li><li>Ativar localização remota quando disponível.</li></ul></div><div class="card"><h3>No Wi‑Fi doméstico</h3><ul class="checklist"><li>Trocar senha padrão.</li><li>Usar senha forte.</li><li>Evitar nome de rede com dados pessoais.</li><li>Usar rede de convidados quando possível.</li><li>Atualizar roteador quando houver atualização.</li></ul></div></div>
+      <div class="question-card"><strong>Checklist pessoal: quais configurações você precisa revisar esta semana?</strong><div class="student-answer" contenteditable="true" data-save-key="config-revisar" data-placeholder="Digite sua lista..."></div></div>
+    </section>
+
+    <section class="page" id="comunicacao">
+      <div class="chapter-kicker">8. E-mail, redes sociais e mensagens</div>
+      <h2>Cuidados nos canais mais usados para golpes</h2>
+      <p class="lead">E-mail, redes sociais e aplicativos de mensagem aproximam criminosos das vítimas. O aluno precisa observar remetente, contexto, link, linguagem e pedido feito na mensagem.</p>
+      <table class="mini-table"><thead><tr><th>Canal</th><th>Cuidados principais</th><th>Erro comum</th></tr></thead><tbody><tr><td>E-mail</td><td>Verificar remetente, desconfiar de anexos, evitar login por link recebido.</td><td>Acreditar no nome exibido sem conferir o endereço.</td></tr><tr><td>Redes sociais</td><td>Revisar privacidade, desconfiar de perfis novos, não publicar documentos ou rotina.</td><td>Aceitar desconhecidos automaticamente.</td></tr><tr><td>WhatsApp e mensageiros</td><td>Ativar verificação em duas etapas, não compartilhar código e confirmar pedidos de dinheiro por ligação.</td><td>Confiar em mensagem “troquei de número”.</td></tr></tbody></table>
+      <div class="callout warning"><strong>Golpe do familiar:</strong> mensagens como “troquei de número” ou “preciso de dinheiro urgente” devem ser verificadas por outro canal. Ligue para o número antigo ou confirme com outro parente.</div>
+      <div class="question-card"><strong>Estudo de caso: você recebeu uma mensagem de parente pedindo dinheiro com urgência. Quais passos deve seguir antes de pagar?</strong><div class="student-answer" contenteditable="true" data-save-key="caso-familiar" data-placeholder="Descreva os passos..."></div></div>
+    </section>
+
+    <section class="page" id="financeiro">
+      <div class="chapter-kicker">9. Compras, bancos e PIX</div>
+      <h2>Como reduzir riscos financeiros</h2>
+      <p class="lead">Serviços financeiros exigem pausa e conferência. O aluno deve aprender a confirmar dados antes de pagar, desconfiar de urgência e usar apenas canais oficiais.</p>
+      <div class="grid-2"><div class="card"><h3>Antes de comprar online</h3><ul class="checklist"><li>Pesquisar reputação da loja.</li><li>Desconfiar de preço muito abaixo do normal.</li><li>Verificar o endereço do site.</li><li>Evitar compras por links de desconhecidos.</li><li>Guardar comprovantes.</li></ul></div><div class="card"><h3>Antes de pagar PIX ou boleto</h3><ul class="checklist"><li>Conferir nome do recebedor.</li><li>Conferir instituição financeira.</li><li>Conferir valor e descrição.</li><li>Não pagar sob pressão.</li><li>Confirmar diretamente com a empresa ou pessoa real.</li></ul></div></div>
+      <div class="callout danger"><strong>Banco nunca deve pedir:</strong> senha completa, código de verificação, token, QR Code de autenticação, foto de cartão, instalação fora da loja oficial, acesso remoto ou PIX “de teste”.</div>
+      <div class="question-card"><strong>Registre sua regra pessoal antes de qualquer pagamento digital.</strong><div class="student-answer" contenteditable="true" data-save-key="regra-pagamento" data-placeholder="Ex.: conferir nome, valor e canal oficial antes de pagar..."></div></div>
+    </section>
+
+    <section class="page" id="backup">
+      <div class="chapter-kicker">10. Backup e recuperação</div>
+      <h2>Como evitar perda de arquivos</h2>
+      <p class="lead">Backup é uma cópia de segurança. Ele protege contra perda de celular, defeito no computador, exclusão acidental, roubo, vírus e ransomware.</p>
+      <table class="mini-table"><thead><tr><th>Tipo de backup</th><th>Vantagem</th><th>Cuidado</th></tr></thead><tbody><tr><td>Nuvem</td><td>Sincroniza arquivos e facilita recuperação em outro aparelho.</td><td>Proteja a conta com senha forte e 2FA.</td></tr><tr><td>HD externo ou pendrive</td><td>Funciona sem internet.</td><td>Não deixe conectado o tempo todo; guarde em local seguro.</td></tr><tr><td>Outro computador</td><td>Serve como cópia adicional.</td><td>Também precisa estar protegido.</td></tr></tbody></table>
+      <h3>Rotina simples</h3>
+      <div class="practice-line"><span class="num">1</span><div><strong>Escolha arquivos importantes.</strong><br>Fotos, documentos, contratos, comprovantes, trabalhos, planilhas e materiais de aula.</div></div>
+      <div class="practice-line"><span class="num">2</span><div><strong>Escolha onde salvar.</strong><br>Use nuvem, HD externo ou ambos.</div></div>
+      <div class="practice-line"><span class="num">3</span><div><strong>Defina frequência.</strong><br>Faça semanalmente ou sempre que produzir arquivos importantes.</div></div>
+      <div class="practice-line"><span class="num">4</span><div><strong>Teste a recuperação.</strong><br>Abra alguns arquivos copiados para confirmar que funcionam.</div></div>
+      <div class="question-card"><strong>Plano de backup do aluno</strong><div class="student-answer" contenteditable="true" data-save-key="plano-backup" data-placeholder="O que será salvo? Onde? Com que frequência?"></div></div>
+    </section>
+
+    <section class="page" id="resposta">
+      <div class="chapter-kicker">11. Suspeita de golpe</div>
+      <h2>O que fazer quando algo parece errado</h2>
+      <p class="lead">Ao perceber algo suspeito, aja rápido, mas sem pânico. A sequência correta reduz danos e evita que o problema se espalhe.</p>
+      <div class="grid-2"><div class="card"><h3>Se clicou em link suspeito</h3><ol><li>Feche a página.</li><li>Não digite senha nem dados.</li><li>Se digitou senha, troque em aparelho confiável.</li><li>Ative ou revise 2FA.</li><li>Verifique atividades recentes.</li></ol></div><div class="card"><h3>Se informou senha ou código</h3><ol><li>Troque a senha da conta afetada.</li><li>Troque a mesma senha em outras contas.</li><li>Saia de todos os dispositivos conectados.</li><li>Revise e-mail e telefone de recuperação.</li><li>Avise contatos se houver risco de golpe em seu nome.</li></ol></div><div class="card"><h3>Se fez pagamento indevido</h3><ol><li>Contate banco ou instituição imediatamente.</li><li>Reúna comprovantes e conversas.</li><li>Registre ocorrência quando necessário.</li><li>Não continue conversando com o golpista.</li></ol></div><div class="card"><h3>Se o aparelho parece infectado</h3><ol><li>Desconecte da internet se necessário.</li><li>Remova apps suspeitos.</li><li>Atualize sistema e antivírus.</li><li>Procure suporte confiável.</li></ol></div></div>
+      <div class="question-card"><strong>Escreva seu protocolo de emergência em cinco passos.</strong><div class="student-answer" contenteditable="true" data-save-key="protocolo-emergencia" data-placeholder="Digite os passos..."></div></div>
+    </section>
+
+    <section class="page" id="laboratorio">
+      <div class="chapter-kicker">12. Laboratório prático</div>
+      <h2>Aplicação guiada no próprio aparelho</h2>
+      <p class="lead">O laboratório transforma a teoria em ação. Execute as tarefas com calma e marque o que já foi concluído.</p>
+      <div class="activity-grid"><div class="lab-card"><h3>Prática 1 · Conta principal</h3><ul class="checklist"><li>Identificar o e-mail principal.</li><li>Verificar se a senha é exclusiva.</li><li>Ativar autenticação em duas etapas.</li><li>Atualizar telefone e e-mail de recuperação.</li></ul><div class="student-answer" contenteditable="true" data-save-key="lab-conta" data-placeholder="Anote o que foi feito e o que ficou pendente..."></div></div><div class="lab-card"><h3>Prática 2 · Celular</h3><ul class="checklist"><li>Conferir bloqueio de tela.</li><li>Verificar atualizações do sistema.</li><li>Revisar permissões de aplicativos.</li><li>Remover apps desconhecidos.</li></ul><div class="student-answer" contenteditable="true" data-save-key="lab-celular" data-placeholder="Anote o resultado da verificação..."></div></div><div class="lab-card"><h3>Prática 3 · Navegador</h3><ul class="checklist"><li>Atualizar o navegador.</li><li>Remover extensões desconhecidas.</li><li>Revisar senhas salvas.</li><li>Ativar proteção contra sites perigosos.</li></ul><div class="student-answer" contenteditable="true" data-save-key="lab-navegador" data-placeholder="Anote o resultado da prática..."></div></div><div class="lab-card"><h3>Prática 4 · Backup</h3><ul class="checklist"><li>Escolher uma pasta importante.</li><li>Copiar para nuvem ou mídia externa.</li><li>Abrir arquivo copiado para testar.</li><li>Definir próxima data de backup.</li></ul><div class="student-answer" contenteditable="true" data-save-key="lab-backup" data-placeholder="Anote o plano de backup..."></div></div></div>
+    </section>
+
+    <section class="page" id="exercicios">
+      <div class="chapter-kicker">13. Exercícios de fixação</div>
+      <h2>Questões para consolidar o conteúdo</h2>
+      <div class="diagnostic-grid"><div class="question-card"><strong>1. Explique a diferença entre privacidade e segurança digital.</strong><div class="student-answer" contenteditable="true" data-save-key="ex-1" data-placeholder="Digite sua resposta..."></div></div><div class="question-card"><strong>2. Por que o e-mail principal é considerado uma conta crítica?</strong><div class="student-answer" contenteditable="true" data-save-key="ex-2" data-placeholder="Digite sua resposta..."></div></div><div class="question-card"><strong>3. Cite quatro sinais de phishing.</strong><div class="student-answer" contenteditable="true" data-save-key="ex-3" data-placeholder="Digite sua resposta..."></div></div><div class="question-card"><strong>4. Qual é a vantagem de usar autenticação em duas etapas?</strong><div class="student-answer" contenteditable="true" data-save-key="ex-4" data-placeholder="Digite sua resposta..."></div></div><div class="question-card"><strong>5. O que deve ser conferido antes de pagar um PIX?</strong><div class="student-answer" contenteditable="true" data-save-key="ex-5" data-placeholder="Digite sua resposta..."></div></div><div class="question-card"><strong>6. O que fazer após perceber que informou senha em site falso?</strong><div class="student-answer" contenteditable="true" data-save-key="ex-6" data-placeholder="Digite sua resposta..."></div></div></div>
+      <div class="callout info"><strong>Correção orientada:</strong> compare suas respostas com os capítulos anteriores. O mais importante é verificar se a resposta apresenta ação prática, não apenas definição teórica.</div>
+    </section>
+
+    <section class="page" id="projeto">
+      <div class="chapter-kicker">14. Projeto final</div>
+      <h2>Plano pessoal de segurança digital</h2>
+      <p class="lead">O projeto final consiste em criar um plano simples de proteção para o próprio cotidiano. Ele deve ser realista, executável e revisado periodicamente.</p>
+      <div class="diagnostic-grid"><div class="question-card"><strong>1. Minhas contas prioritárias</strong><div class="student-answer" contenteditable="true" data-save-key="proj-contas" data-placeholder="Liste contas e prioridades..."></div></div><div class="question-card"><strong>2. Minhas configurações pendentes</strong><div class="student-answer" contenteditable="true" data-save-key="proj-config" data-placeholder="Liste o que precisa configurar..."></div></div><div class="question-card"><strong>3. Minha rotina de backup</strong><div class="student-answer" contenteditable="true" data-save-key="proj-backup" data-placeholder="Defina onde, quando e o que salvar..."></div></div><div class="question-card"><strong>4. Meu protocolo contra golpes</strong><div class="student-answer" contenteditable="true" data-save-key="proj-golpes" data-placeholder="Defina como você vai confirmar mensagens e pagamentos..."></div></div></div>
+      <h3>Critérios do projeto</h3>
+      <div class="rubric"><div><strong>Clareza</strong><br>O plano diz exatamente o que será feito.</div><div><strong>Prioridade</strong><br>Começa pelas contas mais importantes.</div><div><strong>Viabilidade</strong><br>É possível executar com os recursos disponíveis.</div><div><strong>Revisão</strong><br>Prevê atualização e conferência periódica.</div></div>
+    </section>
+
+    <section class="page" id="autoavaliacao">
+      <div class="chapter-kicker">15. Autoavaliação</div>
+      <h2>O que eu aprendi e o que ainda preciso melhorar</h2>
+      <p class="lead">Use esta etapa para medir seu progresso. Responda com sinceridade e transforme as pendências em próximos passos.</p>
+      <div class="diagnostic-grid"><div class="question-card"><strong>1. Consigo reconhecer uma mensagem suspeita?</strong><div class="student-answer" contenteditable="true" data-save-key="auto-1" data-placeholder="Explique sua resposta..."></div></div><div class="question-card"><strong>2. Minhas contas importantes têm senha forte e 2FA?</strong><div class="student-answer" contenteditable="true" data-save-key="auto-2" data-placeholder="Explique sua situação atual..."></div></div><div class="question-card"><strong>3. Sei o que fazer antes de pagar PIX ou boleto?</strong><div class="student-answer" contenteditable="true" data-save-key="auto-3" data-placeholder="Explique sua regra de conferência..."></div></div><div class="question-card"><strong>4. Tenho backup dos meus arquivos importantes?</strong><div class="student-answer" contenteditable="true" data-save-key="auto-4" data-placeholder="Descreva seu backup..."></div></div><div class="question-card"><strong>5. O que vou mudar na minha rotina digital a partir desta ficha?</strong><div class="student-answer" contenteditable="true" data-save-key="auto-5" data-placeholder="Digite seu compromisso de melhoria..."></div></div><div class="question-card"><strong>6. Qual dúvida ainda preciso tirar?</strong><div class="student-answer" contenteditable="true" data-save-key="auto-6" data-placeholder="Digite suas dúvidas..."></div></div></div>
+    </section>
+
+    <section class="page" id="glossario">
+      <div class="chapter-kicker">Glossário</div>
+      <h2>Termos essenciais para consulta</h2>
+      <dl class="glossary"><dd><dt>Backup</dt><p>Cópia de segurança de arquivos importantes.</p></dd><dd><dt>2FA/MFA</dt><p>Autenticação em duas ou mais etapas, usada para reforçar o login.</p></dd><dd><dt>Phishing</dt><p>Golpe que tenta roubar dados por mensagem, link ou página falsa.</p></dd><dd><dt>Malware</dt><p>Programa malicioso criado para prejudicar, espionar ou roubar dados.</p></dd><dd><dt>Ransomware</dt><p>Malware que bloqueia arquivos e exige pagamento.</p></dd><dd><dt>Passkey</dt><p>Método moderno de login que usa dispositivo, biometria ou PIN.</p></dd><dd><dt>Token</dt><p>Código ou recurso usado para autenticar uma operação.</p></dd><dd><dt>Engenharia social</dt><p>Manipulação psicológica para convencer a vítima a realizar uma ação insegura.</p></dd><dd><dt>Permissões</dt><p>Acessos concedidos a aplicativos, como câmera, microfone, contatos e localização.</p></dd><dd><dt>Conta crítica</dt><p>Conta que, se invadida, permite recuperar ou comprometer outras contas.</p></dd></dl>
+      <div class="callout success"><strong>Revisão final:</strong> segurança digital não depende de um único aplicativo. Ela depende de hábito, conferência, atualização, senha forte, autenticação, backup e desconfiança diante de pressão.</div>
+    </section>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+
+  <script>
+    (function () {
+      const prefix = "ficha-seguranca-digital:";
+      const fields = Array.from(document.querySelectorAll(".student-answer[contenteditable='true']"));
+      fields.forEach((field, index) => {
+        const key = prefix + (field.dataset.saveKey || ("campo-" + index));
+        const saved = localStorage.getItem(key);
+        if (saved !== null) {
+          field.innerHTML = saved;
+        }
+        field.addEventListener("input", () => {
+          localStorage.setItem(key, field.innerHTML);
+        });
+        field.addEventListener("paste", (event) => {
+          event.preventDefault();
+          const text = (event.clipboardData || window.clipboardData).getData("text/plain");
+          document.execCommand("insertText", false, text);
+        });
+      });
+    })();
+  </script>
+
+  <script>
+    (function () {
+      const stage = document.getElementById("viewerStage");
+      const book = document.getElementById("bookPages");
+      const pages = Array.from(book.querySelectorAll(".page"));
+      const sidebarLinks = Array.from(document.querySelectorAll("#sidebarNav a"));
+      const topLinks = Array.from(document.querySelectorAll(".topbar .nav a"));
+      const prevBtn = document.getElementById("prevPage");
+      const nextBtn = document.getElementById("nextPage");
+      const status = document.getElementById("viewerStatus");
+      const scalePreference = document.getElementById("scalePreference");
+      const scaleNote = document.getElementById("scaleNote");
+
+      if (!stage || pages.length === 0 || !prevBtn || !nextBtn || !status) {
+        return;
+      }
+
+      function prepareContentWrappers() {
+        pages.forEach((page) => {
+          if (page.querySelector(":scope > .page-content")) {
+            return;
+          }
+          const wrapper = document.createElement("div");
+          wrapper.className = "page-content legacy-content";
+          while (page.firstChild) {
+            wrapper.appendChild(page.firstChild);
+          }
+          page.appendChild(wrapper);
+        });
+      }
+
+      function isDesktopViewer() {
+        return window.matchMedia("(min-width: 1081px)").matches;
+      }
+
+      let activeIndex = 0;
+
+      function indexFromHash() {
+        const hash = window.location.hash.replace("#", "");
+        if (!hash) {
+          return 0;
+        }
+        const found = pages.findIndex((page) => page.id === hash);
+        return found >= 0 ? found : 0;
+      }
+
+      function fitActivePage() {
+        if (!isDesktopViewer()) {
+          stage.classList.remove("is-scaled");
+          stage.classList.remove("mode-reading", "mode-fit");
+          return;
+        }
+
+        const page = pages[activeIndex];
+        const content = page.querySelector(":scope > .page-content");
+        if (!content) {
+          return;
+        }
+
+        const preference = scalePreference ? scalePreference.value : "reading";
+        stage.classList.toggle("mode-reading", preference === "reading");
+        stage.classList.toggle("mode-fit", preference === "fit");
+        content.classList.toggle("tight-mode", preference === "fit");
+
+        if (preference === "reading") {
+          content.style.transform = "none";
+          content.style.width = "auto";
+          stage.classList.remove("is-scaled");
+          if (scaleNote) {
+            scaleNote.textContent = "Modo leitura · rolagem ativa";
+          }
+          return;
+        }
+
+        content.style.transform = "scale(1)";
+        content.style.width = "100%";
+
+        const paddingAllowance = 4;
+        const availableW = page.clientWidth - paddingAllowance;
+        const availableH = page.clientHeight - paddingAllowance;
+        const naturalW = content.scrollWidth;
+        const naturalH = content.scrollHeight;
+
+        if (!naturalW || !naturalH) {
+          return;
+        }
+
+        const ratioW = availableW / naturalW;
+        const ratioH = availableH / naturalH;
+        let scale = Math.min(1, ratioW, ratioH);
+
+        const minScale = 0.56;
+        scale = Math.max(minScale, scale);
+
+        const forcedFit = Math.min(1, ratioW, ratioH);
+        if (scale > forcedFit) {
+          scale = forcedFit;
+        }
+
+        content.style.transform = "scale(" + scale + ")";
+        content.style.width = (100 / scale) + "%";
+        stage.classList.toggle("is-scaled", scale < 0.999);
+
+        if (scaleNote) {
+          const percent = Math.round(scale * 100);
+          scaleNote.textContent = "Modo reduzido · " + percent + "%";
+        }
+      }
+
+      function syncActiveLinks() {
+        const id = pages[activeIndex].id;
+        sidebarLinks.forEach((link) => {
+          link.classList.toggle("active", link.getAttribute("href") === "#" + id);
+        });
+      }
+
+      function updateStatus() {
+        status.textContent = "Tópico " + (activeIndex + 1) + " de " + pages.length;
+        prevBtn.disabled = activeIndex === 0;
+        nextBtn.disabled = activeIndex === pages.length - 1;
+      }
+
+      function showPage(index, updateHash) {
+        const nextIndex = Math.max(0, Math.min(pages.length - 1, index));
+        const hasPageChanged = nextIndex !== activeIndex;
+        activeIndex = nextIndex;
+
+        pages.forEach((page, i) => {
+          page.classList.toggle("active", i === activeIndex);
+          page.setAttribute("aria-hidden", i === activeIndex ? "false" : "true");
+          if (i === activeIndex && hasPageChanged) {
+            page.scrollTop = 0;
+          }
+        });
+
+        updateStatus();
+        syncActiveLinks();
+        fitActivePage();
+
+        if (updateHash) {
+          history.replaceState(null, "", "#" + pages[activeIndex].id);
+        }
+      }
+
+      function handleLinkClick(event) {
+        const href = event.currentTarget.getAttribute("href") || "";
+        if (!href.startsWith("#")) {
+          return;
+        }
+        const id = href.slice(1);
+        const idx = pages.findIndex((page) => page.id === id);
+        if (idx < 0) {
+          return;
+        }
+
+        if (isDesktopViewer()) {
+          event.preventDefault();
+          showPage(idx, true);
+        }
+      }
+
+      sidebarLinks.forEach((link) => link.addEventListener("click", handleLinkClick));
+      topLinks.forEach((link) => link.addEventListener("click", handleLinkClick));
+
+      prevBtn.addEventListener("click", () => showPage(activeIndex - 1, true));
+      nextBtn.addEventListener("click", () => showPage(activeIndex + 1, true));
+
+      if (scalePreference) {
+        scalePreference.addEventListener("change", () => {
+          showPage(activeIndex, false);
+        });
+      }
+
+      document.addEventListener("keydown", (event) => {
+        if (!isDesktopViewer()) {
+          return;
+        }
+        const editing = event.target && event.target.closest && event.target.closest("[contenteditable='true'], textarea, input, select");
+        if (editing) {
+          return;
+        }
+        if (event.key === "ArrowRight") {
+          showPage(activeIndex + 1, true);
+        }
+        if (event.key === "ArrowLeft") {
+          showPage(activeIndex - 1, true);
+        }
+      });
+
+      window.addEventListener("resize", () => {
+        if (!isDesktopViewer()) {
+          stage.classList.remove("is-scaled");
+          stage.classList.remove("mode-reading", "mode-fit");
+          pages.forEach((page) => {
+            const content = page.querySelector(":scope > .page-content");
+            if (content) {
+              content.style.transform = "none";
+              content.style.width = "auto";
+              content.classList.remove("tight-mode");
+            }
+            page.classList.add("active");
+            page.setAttribute("aria-hidden", "false");
+          });
+          return;
+        }
+
+        showPage(activeIndex, false);
+      });
+
+      prepareContentWrappers();
+      const initial = indexFromHash();
+      if (isDesktopViewer()) {
+        showPage(initial, false);
+      } else {
+        activeIndex = initial;
+        updateStatus();
+        syncActiveLinks();
+      }
+    })();
+  </script>
+</body>
+</html>
